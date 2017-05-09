@@ -25,17 +25,24 @@ class data_engine(object):
 			for filename in filenames:
 				img = mpimg.imread(os.path.join(parent, filename)).astype('float32')
 
-				# cut 3-channel img to 1-channel
-				if len(img.shape) == 3:
-					img = img[:, :, 0]
+				# cut 2-channel img to 1-channel
+				if len(img.shape) == 2:
+					pimg = img
+					img = np.zeros((img.shape[0], img.shape[1], 1))
+					img[:, :, 0] = pimg
 				end
+				
+				if len(img.shape) == 3:
+					pimg = img
+					img = np.zeros((img.shape[0], img.shape[1], 1))
+					img[:, :, 0] = pimg[:, :, 0]
 
 				# cut img -> (32, 32)
-				img = img[:32, :32]
+				img = img[:32, :32, :]
 
 				# assure img shape
 				try:
-					assert img.shape == (32, 32)
+					assert img.shape == (32, 32, 1)
 				except:
 					print img.shape
 				end
@@ -96,16 +103,24 @@ class data_engine(object):
 				end
 
 				# cut 3-channel img to 1-channel
+				if len(img.shape) == 2:
+					pimg = img
+					img = np.zeros((img.shape[0], img.shape[1], 1))
+					img[:, :, 0] = pimg
+				end
+				
 				if len(img.shape) == 3:
-					img = img[:, :, 0]
+					pimg = img
+					img = np.zeros((img.shape[0], img.shape[1], 1))
+					img[:, :, 0] = pimg[:, :, 0]
 				end
 
 				# cut img -> (32, 32)
-				img = img[:32, :32]
+				img = img[:32, :32, :]
 
 				# assure img shape
 				try:
-					assert img.shape == (32, 32)
+					assert img.shape == (32, 32, 1)
 				except:
 					print img.shape
 				end
@@ -131,10 +146,17 @@ class data_engine(object):
 		self.test_x = np.asarray(test_x)
 		self.test_y = np.asarray(test_y)
 		print 'loaded test set, shape', self.test_x.shape
-		# print np.max(self.test_x) # 1.0
 		print 'loaded test label, shape', self.test_y.shape
 
 	end # def
+
+	def train_set(self):
+		return self.train_x, self.train_y
+	end
+
+	def test_set(self):
+		return self.test_x, self.test_y
+	end
 
 end # class 
 
