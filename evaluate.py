@@ -13,11 +13,17 @@ from sklearn.neural_network import BernoulliRBM
 from sklearn.pipeline import Pipeline
 
 import data_engine
+from numbers_prior import noise_cancellation
 
 def load_data():
     engine = data_engine.data_engine()
     engine.load()
-    return [engine.train_x.reshape([-1, 32 * 32]), engine.train_y, engine.test_x.reshape([-1, 32 * 32]), engine.test_y]
+    train_x, train_y, test_x, test_y = noise_cancellation(engine.train_x.reshape((-1, 32, 32)), engine.train_y, engine.test_x.reshape((-1, 32, 32)), engine.test_y)
+
+    # baseline
+    # train_x, train_y, test_x, test_y = engine.train_x, engine.train_y, engine.test_x, engine.test_y
+
+    return [train_x.reshape([-1, 32 * 32]), train_y, test_x.reshape([-1, 32 * 32]), test_y]
 
 def get_prediction(X_train, Y_train, X_test, Y_test):
     logistic = linear_model.LogisticRegression()
@@ -49,6 +55,8 @@ def get_prediction(X_train, Y_train, X_test, Y_test):
             Y_test,
             logistic_classifier.predict(X_test))))
 
-X_train, Y_train, X_test, Y_test = load_data()
+if __name__ == '__main__':
 
-get_prediction(X_train, Y_train, X_test, Y_test)
+    X_train, Y_train, X_test, Y_test = load_data()
+
+    get_prediction(X_train, Y_train, X_test, Y_test)

@@ -21,16 +21,6 @@ class model_cnn(object):
 		self.model = Sequential()
 
 		self.model.add(Flatten(input_shape=(32, 32, 1)))
-		
-		# self.model.add(Dense(512))
-		# self.model.add(Activation('sigmoid'))
-		# self.model.add(Dense(256))
-		# self.model.add(Activation('sigmoid'))
-		# self.model.add(Dense(128))
-		# self.model.add(Activation('sigmoid'))
-		# self.model.add(Dense(64))
-		# self.model.add(Activation('sigmoid'))
-		# self.model.add(Dropout(0.5))
 		self.model.add(Dense(self.num_classes)) # 10
 		self.model.add(Activation('softmax'))
 
@@ -51,6 +41,7 @@ class model_cnn(object):
 		self.model.add(Dense(self.num_classes)) # 10
 		self.model.add(Activation('softmax'))
 		'''
+		
 		self.opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
 		self.model.compile(loss='categorical_crossentropy', optimizer=self.opt, metrics=['accuracy'])
 	end

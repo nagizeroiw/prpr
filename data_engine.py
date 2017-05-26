@@ -50,6 +50,8 @@ class data_engine(object):
 				# regularization
 				if np.max(img) > 1:
 					img /= 255.
+
+				img = 1. - img
 				
 				if parent.endswith('digits'):
 					label = int(filename[0])
@@ -128,6 +130,8 @@ class data_engine(object):
 				# regularization
 				if np.max(img) > 1:
 					img /= 255.
+
+				img = 1. - img
 
 				label = int(filename[filename.find('[') + 1])
 
