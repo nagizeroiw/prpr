@@ -27,17 +27,19 @@ def noise_cancellation(train_x, train_y, test_x, test_y):
 
 		continue
 
-		plt.imshow(prior_probs[k], cmap='gray')
-		plt.colorbar()
-		print prior_probs[k]
-		plt.title('%d'%k)
-		plt.show()
+		fig = plt.imshow(prior_probs[k], cmap='gray')
+		# plt.colorbar()
+		
+		# print prior_probs[k]
+		plt.imsave('%d.png'%k, prior_probs[k])
+		# plt.show()
 
 	for i in range(len(train_y)):
 		ori_max = np.amax(train_x[i])
 		img = np.multiply(train_x[i], prior_probs[train_y[i]])
 		img = img / np.amax(img) * ori_max
 		train_x[i] = img
+
 		continue
 
 		f, axarr = plt.subplots(1, 3)
@@ -71,4 +73,4 @@ if __name__ == '__main__':
 
 	train_x, train_y = engine.train_x.reshape((-1, 32, 32)), engine.train_y
 
-	noise_cancellation(train_x, train_y)
+	noise_cancellation(train_x, train_y, None, None)
